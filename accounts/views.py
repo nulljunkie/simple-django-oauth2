@@ -1,9 +1,11 @@
+import requests
 from django.conf import settings
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.shortcuts import redirect, render
 
 from .forms import UserLoginForm, UserRegistrationForm
 
+User = get_user_model()
 
 def index(request):
     return render(request, 'index.html', {'user': request.user})
@@ -46,10 +48,33 @@ def logout_view(request):
     logout(request)
     return redirect('index')
 
-def github_oauth_view(request):
+def github_callback_view(request):
     if request.method == 'GET':
         code = request.GET.get('code')
-        print('code: ', code)
+        client_id = settings.GITHUB_CLIENT_ID
+        client_secret = settings.GITHUB_CLIENT_SECRET
+
+        token_response = requests.post('https://github.com/login/oauth/access_token', data={
+            'client_id': client_id,
+            'client_secret': client_secret,
+            'code': code
+        }, headers={'Accept': 'application/json'})
+
+        token_json = token_response.json()
+        access_token = token_json.get('access_token')
+        print('access_token: ', access_token)
+
+        user_info_response = requests.get('https://api.github.com/user', headers={
+            'Authorization': f'token {access_token}'
+        })
+
+        user_info = user_info_response.json()
+
+        username = user_info.get('login')
+        print('username: ', username)
+
+        user, created = User.objects.get_or_create(username=username)
+
+        login(request, user)
+
         return redirect('index')
-
-
