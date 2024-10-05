@@ -13,7 +13,9 @@
       {% csrf_token %} {{ form.as_p }}
       <button class="btn" type="submit">Login</button>
     </form>
-    <button class="github-btn">login with Github</button>
+    <a href="{{ oauth_github }}">
+        <button class="github-btn" >Login with Github</button>
+    </a>
     <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
   </body>
 </html>

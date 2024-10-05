@@ -7,6 +7,10 @@ from .forms import UserLoginForm, UserRegistrationForm
 
 User = get_user_model()
 
+client_id = settings.GITHUB_CLIENT_ID
+redirect_uri = 'http://localhost:8080/accounts/github/callback'
+oauth_url = f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&scope=read:user"
+
 def index(request):
     return render(request, 'index.html', {'user': request.user})
 
@@ -20,9 +24,6 @@ def register(request):
             return redirect('login')  # Redirect to login page after registration
     else:
         form = UserRegistrationForm()
-        client_id = settings.GITHUB_CLIENT_ID
-        redirect_uri = 'http://localhost:8080/accounts/github/callback'
-        oauth_url = f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&scope=read:user"
         ctx = {
             'form': form,
             'oauth_github': oauth_url
@@ -41,7 +42,11 @@ def login_view(request):
                 return redirect('index')  # Redirect to home after login
     else:
         form = UserLoginForm()
-    return render(request, 'login.html', {'form': form})
+        ctx = {
+            'form': form,
+            'oauth_github': oauth_url
+        }
+    return render(request, 'login.html', ctx)
 
 
 def logout_view(request):
