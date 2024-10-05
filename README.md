@@ -3,8 +3,8 @@ Simple Django OAuth app with GitHub authentication:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/82bits/simple_django_oauth2.git
-cd simple_django_oauth2
+git clone https://github.com/82bits/simple-django-oauth2.git
+cd simple-django-oauth2
 ```
 
 2. Set up the development environment and install the requirements:
