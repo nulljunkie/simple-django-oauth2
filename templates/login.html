@@ -1,0 +1,19 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+    <title>Login</title>
+  </head>
+  <body>
+    <h1>Login</h1>
+    <form method="post">
+      {% csrf_token %} {{ form.as_p }}
+      <button class="btn" type="submit">Login</button>
+    </form>
+    <button class="github-btn">login with Github</button>
+    <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+  </body>
+</html>

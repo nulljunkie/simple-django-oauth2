@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+    <title>{% block title %}{% endblock %}</title>
+<style>
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            }
+        .nav .navlinks {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav .navlinks a, p{
+            padding: 20px;
+        }
+</style>
+  </head>
+  <body>
+        <nav class="nav">
+    <h1>oauth2.1</h1>
+            <div class="navlinks">
+      {% if user.is_authenticated %}
+          <p>Welcome <strong>{{user.username}}</strong></p>
+          <a href="{% url 'logout' %}">Logout</a>
+      {% else %}
+          <a href="{% url 'login' %}">Login</a>
+          <a href="{% url 'register' %}">Register</a>
+      {% endif %}
+            </div>
+    </nav>
+    {% block content %}
+    {% endblock %}
+    </body>
+</html>
